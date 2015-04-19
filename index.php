@@ -5,7 +5,11 @@
 	Make it flexbox, with a nice VHS logo or something
 */
 
+$debugging = true;
+$dir = "Unsorted";
 $videoFiletypes = ['webm','mkv','flv','vob','ogv','avi','mov','yuv','rm','rmvb','asf','mp4','m4p','m4v','mpg','mp2','mpeg','mpe','mpv','mpg','mpeg','m2v','m4v','3gp','3g2','nsv'];
+
+if ($debugging==true) array_push($videoFiletypes, 'txt');
 
 $videos = [];
 function buildVideoArray($dir) {
@@ -49,7 +53,6 @@ function buildVideoArray($dir) {
 	return $videos;
 }
 
-$dir = "C:\Manor\Unsorted";
 buildVideoArray($dir);
 
 echo '<pre>';print_r($videos);

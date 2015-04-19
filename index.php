@@ -1,61 +1,82 @@
 <?php
-
+require 'config.php';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Video Helper</title>
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="button saveVideos clear">Save Videos</div>
+<div class="status"></div>
+<?php
 /*
 	To do
+	Make it run saveVideos once an hour, storing up all the stuff
 	Make it flexbox, with a nice VHS logo or something
+	check it doesn't bork up with Films (2014)
+	IP security
+	Proper $dir
 */
 
-$debugging = true;
-$dir = "Unsorted";
-$videoFiletypes = ['webm','mkv','flv','vob','ogv','avi','mov','yuv','rm','rmvb','asf','mp4','m4p','m4v','mpg','mp2','mpeg','mpe','mpv','mpg','mpeg','m2v','m4v','3gp','3g2','nsv'];
-
-if ($debugging==true) array_push($videoFiletypes, 'txt');
-
-$videos = [];
-function buildVideoArray($dir) {
-	global $videos;
-	global $videoFiletypes;
-	$files = scandir($dir, SCANDIR_SORT_ASCENDING);
-	foreach ($files as $file) {
-		if ($file != '.' && $file != '..') {
-			if (is_dir($dir.'\\'.$file)) {
-				buildVideoArray($dir.'\\'.$file);
-			} else {
-				$video = [];
-				// Store up some tasty info about the video
-				$explode = explode('.', $file);
-				$video['path'] = $dir.'\\'.$file;
-				$video['filetype'] = $explode[count($explode)-1];
-				array_pop($explode);
-				$video['name'] = implode('.', $explode);
-
-				// replace spaces with .
-				$video['fragments'] = str_replace(' ', '.', $video['name']);
-				// explode .
-				$video['fragments'] = explode('.', $video['name']);
-
-				// find episode number...
-				$count = -1;
-				foreach ($video['fragments'] as $fragment) {
-					$count++;
-					if ($count==0) continue; // not going to be at the start of the file
-					echo $fragment;
+function echoVideos($videos) {
+	echo '<ul class="videos">';
+	if (!empty($videos)) {
+		foreach ($videos as $name=>$season) {
+			echo '<li>'.$name.'<ul>';
+			foreach ($videos[$name] as $season=>$episode) {
+				echo '<li>'.$season.'<ul>';
+				foreach ($videos[$name][$season] as $episode=>$details) {
+					echo '<li>'.$episode.'</li>';
 				}
-
-				// If not a supported filetype, give up and go home
-				if (!in_array($video['filetype'], $videoFiletypes)) continue;
-
-				// If we're golden, push to videos array
-				array_push($videos, $video);
+				echo '</ul></li>';
 			}
+			echo '</ul></li>';
 		}
 	}
-	return $videos;
+	echo '</ul>';
 }
 
-buildVideoArray($dir);
+$videos = getVideos();
+$videos = organiseVideos($videos);
+$videos = sortVideos($videos);
+#print_r($videos);
+echoVideos($videos);
 
-echo '<pre>';print_r($videos);
 
+#echo "\n\n\n\n\n";print_r($videos);
 
 ?>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+
+$('.saveVideos').click(function() {
+	$('.status').html('Saving Videos..');
+
+	$.post('saveVideos.php', {
+	}, function(echo) {
+		//c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('Get Videos Error!');
+		c(data);
+	})
+	.done(function(data) {
+		$('.status').html('Videos saved. Reloading..');
+		setTimeout(function() { location.reload(); }, 2000);
+	});
+});
+
+$('.videos>li').click(function() {
+	$(this).children('ul').slideToggle();
+});
+
+});
+
+function c(c) { console.log(c); }
+</script>
+</body>
+</html>

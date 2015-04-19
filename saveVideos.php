@@ -22,9 +22,10 @@ function buildVideoArray($dir) {
 				$video['name'] = implode('.', $explode);
 
 				// replace spaces with .
-				$video['fragments'] = str_replace(' ', '.', $video['name']);
+				$video['fragments'] = $video['name'];
+				$video['fragments'] = str_replace(' ', '.', $video['fragments']);
 				// replace _ with .
-				$video['fragments'] = str_replace('_', '.', $video['name']);
+				$video['fragments'] = str_replace('_', '.', $video['fragments']);
 				// explode .
 				$video['fragments'] = explode('.', $video['fragments']);
 

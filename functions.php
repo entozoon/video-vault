@@ -1,5 +1,14 @@
 <?php
 
+function clearVideos() {
+	global $conn;
+
+	$sql = "TRUNCATE TABLE videos";
+	$q = $conn->prepare($sql);
+	$q->execute();
+	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+}
+
 function getVideos() {
 	global $conn;
 
@@ -42,6 +51,25 @@ function sortVideos($organised) {
 		}
 	}
 	return $organised;
+}
+
+
+function echoVideos($videos) {
+	echo '<ul class="videos">';
+	if (!empty($videos)) {
+		foreach ($videos as $name=>$season) {
+			echo '<li>'.$name.'<ul>';
+			foreach ($videos[$name] as $season=>$episode) {
+				echo '<li>'.$season.'<ul>';
+				foreach ($videos[$name][$season] as $episode=>$details) {
+					echo '<li>'.$episode.' - '.$details['path'].'</li>';
+				}
+				echo '</ul></li>';
+			}
+			echo '</ul></li>';
+		}
+	}
+	echo '</ul>';
 }
 
 ?>

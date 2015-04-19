@@ -36,9 +36,24 @@ function buildVideoArray($dir) {
 					$count++;
 					if ($count==0) continue; // not going to be at the start of the file
 					if (!empty($video['episeason'])) continue;
+					if ($video['season']!='' && $video['episode']!='') continue;
 
+					// if s1e4 .. s01e04 s10e021 ..
+					if (!is_numeric($fragment)) {
+						$pattern = '/^[Ss][0-9]+[Ee][0-9]+/';
+						if (preg_match($pattern, $fragment)) {
+
+							#echo "\n".$video['name']."\n".$fragment."\n";
+
+							$thinking = str_replace(array('S','s','E','e'), 'dwa', $fragment);
+							$thinking = explode('dwa', $thinking);
+							$video['season'] = $thinking[1];
+							$video['episode'] = $thinking[2];
+							$video['episeasonPosition'] = $count;
+						}
+					}
 					// if 104 ..  1021 ..
-					if (is_numeric($fragment)) {
+					else {
 						$video['episeason'] = $fragment;
 						// 104
 						if (strlen($fragment)==3) {
@@ -53,19 +68,7 @@ function buildVideoArray($dir) {
 							$video['episeasonPosition'] = $count;
 						}
 					}
-					// if s1e4 .. s01e04 s10e21 ..
-					else {
-						$pattern = '/^[Ss][0-9]+[Ee][0-9]+/';
-						if (preg_match($pattern, $fragment)) {
-							$thinking = str_replace(array('S','s','E','e'), 'dwa', $fragment);
-							$thinking = explode('dwa', $thinking);
-							$video['season'] = $thinking[1];
-							$video['episode'] = $thinking[2];
-							$video['episeasonPosition'] = $count;
-						}
-					}
 				}
-				#print_r($video);
 
 				// strip any trailing zeros and such
 				if (!empty($video['season'])) $video['season'] = (float)$video['season'];

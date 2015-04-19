@@ -9,6 +9,7 @@ require 'config.php';
 </head>
 <body>
 <div class="button saveVideos clear">Save Videos</div>
+<div class="button clearVideos clear">Clear Videos</div>
 <div class="status"></div>
 <?php
 /*
@@ -20,23 +21,6 @@ require 'config.php';
 	Proper $dir
 */
 
-function echoVideos($videos) {
-	echo '<ul class="videos">';
-	if (!empty($videos)) {
-		foreach ($videos as $name=>$season) {
-			echo '<li>'.$name.'<ul>';
-			foreach ($videos[$name] as $season=>$episode) {
-				echo '<li>'.$season.'<ul>';
-				foreach ($videos[$name][$season] as $episode=>$details) {
-					echo '<li>'.$episode.'</li>';
-				}
-				echo '</ul></li>';
-			}
-			echo '</ul></li>';
-		}
-	}
-	echo '</ul>';
-}
 
 $videos = getVideos();
 $videos = organiseVideos($videos);
@@ -54,18 +38,35 @@ echoVideos($videos);
 $(function() {
 
 $('.saveVideos').click(function() {
-	$('.status').html('Saving Videos..');
+	$('.status').html('Saving videos..');
 
 	$.post('saveVideos.php', {
 	}, function(echo) {
 		//c(echo);
 	})
 	.fail(function(data) {
-		$('.status').html('Get Videos Error!');
+		$('.status').html('Get videos error!');
 		c(data);
 	})
 	.done(function(data) {
-		$('.status').html('Videos saved. Reloading..');
+		$('.status').html('Videos saved, reloading..');
+		setTimeout(function() { location.reload(); }, 2000);
+	});
+});
+
+$('.clearVideos').click(function() {
+	$('.status').html('Clearing videos..');
+
+	$.post('clearVideos.php', {
+	}, function(echo) {
+		//c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('Clear videos error!');
+		c(data);
+	})
+	.done(function(data) {
+		$('.status').html('Videos cleared, reloading..');
 		setTimeout(function() { location.reload(); }, 2000);
 	});
 });

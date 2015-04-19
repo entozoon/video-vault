@@ -55,7 +55,7 @@ function buildVideoArray($dir) {
 					}
 					// if s1e4 .. s01e04 s10e21 ..
 					else {
-						$pattern = '/^S[0-9]+E[0-9]+/';
+						$pattern = '/^[Ss][0-9]+[Ee][0-9]+/';
 						if (preg_match($pattern, $fragment)) {
 							$thinking = str_replace(array('S','s','E','e'), 'dwa', $fragment);
 							$thinking = explode('dwa', $thinking);
@@ -65,6 +65,7 @@ function buildVideoArray($dir) {
 						}
 					}
 				}
+				#print_r($video);
 
 				// strip any trailing zeros and such
 				if (!empty($video['season'])) $video['season'] = (float)$video['season'];

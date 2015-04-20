@@ -5,6 +5,18 @@ $database = "video-helper";
 $username = "root";
 $password = "mysql";
 
+
+switch($_SERVER["HTTP_HOST"]) {
+
+	// general
+	case "localhost:88":
+		$password = "";
+	break;
+
+	default:
+	break;
+}
+
 try {
 	$conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
 	// set the PDO error mode to exception

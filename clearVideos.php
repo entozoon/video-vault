@@ -2,3 +2,4 @@
 require 'config.php';
 
 clearVideos();
+?>

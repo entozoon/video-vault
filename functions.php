@@ -62,7 +62,7 @@ function echoVideos($videos) {
 			foreach ($videos[$name] as $season=>$episode) {
 				echo '<li class="videos__season"><span class="toggle">Season '.$season.'</span><ul class="videos__episodes toggle__content">';
 				foreach ($videos[$name][$season] as $episode=>$details) {
-					echo '<li class="videos__episode">Episode '.$episode.' - '.$details['path'].'</li>';
+					echo '<li class="videos__episode" data-path="'.$details['path'].'">Episode '.$episode.' - '.$details['path'].'</li>';
 				}
 				echo '</ul></li>';
 			}
@@ -70,6 +70,11 @@ function echoVideos($videos) {
 		}
 	}
 	echo '</ul>';
+}
+
+function playVideo($path) {
+	echo $path;
+	#echo shell_exec($path);
 }
 
 ?>

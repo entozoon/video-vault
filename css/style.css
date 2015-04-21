@@ -42,4 +42,5 @@ ul, li {
 	padding-bottom: 20px;
 }
 .videos__episode {
+	cursor: pointer;
 }

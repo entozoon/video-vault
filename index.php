@@ -75,6 +75,24 @@ $('.videos .toggle').click(function() {
 	$(this).siblings('.toggle__content').slideToggle();
 });
 
+
+$('.videos__episode').click(function() {
+	$('.status').html('Playing video..');
+
+	$.post('playVideo.php', {
+		path: $(this).attr('data-path')
+	}, function(echo) {
+		c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('Playing video error!');
+		c(data);
+	})
+	.done(function(data) {
+		$('.status').html();
+	})
+});
+
 });
 
 function c(c) { console.log(c); }

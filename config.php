@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+
 require 'functions.php';
 $servername = "localhost";
 $database = "video-helper";
@@ -30,8 +32,10 @@ catch(PDOException $e) {
 
 $debugging = false;
 
+// Path must be the full, escaped path, e.g. $dir = 'C:\wherever';
 #$dir = "\\\\evermore\\unsorted";
-$dir = "unsorted";
+#$dir = "unsorted";
+$dir = 'E:\www\m.ichael\video-vault\Unsorted';
 
 $videoFiletypes = ['webm','mkv','flv','vob','ogv','avi','mov','yuv','rm','rmvb','asf','mp4','m4p','m4v','mpg','mp2','mpeg','mpe','mpv','mpg','mpeg','m2v','m4v','3gp','3g2','nsv','h264'];
 $videos = [];

@@ -14,4 +14,7 @@ E:\wamp\bin\apache\apache2.4.9\bin\httpd.exe -n wampapache64 -k stop
 
 echo.
 echo Apache and MySQL should be running
-E:\wamp\bin\apache\apache2.4.9\bin\httpd.exe -n wampapache64 -k start
+echo (this might need to run as administrator)
+E:\wamp\bin\apache\apache2.4.9\bin\httpd.exe
+pause
+::E:\wamp\bin\apache\apache2.4.9\bin\httpd.exe -n wampapache64 -k start

@@ -73,8 +73,12 @@ function echoVideos($videos) {
 }
 
 function playVideo($path) {
-	echo $path;
-	#echo shell_exec($path);
+	#echo $path;
+	echo shell_exec('start "Opened by Video Vault" "'.$path.'" && exit');
+	/*
+	$commandString = "start /b c:\\php\\php.EXE C:\\Inetpub\\wwwroot\\mysite.com\\phpforktest.php --passmsg=$testmsg";
+	pclose(popen($commandString, 'r'));
+	*/
 }
 
 ?>

@@ -71,8 +71,8 @@ $('.clearVideos').click(function() {
 	});
 });
 
-$('.videos>li').click(function() {
-	$(this).children('ul').slideToggle();
+$('.videos .toggle').click(function() {
+	$(this).siblings('.toggle__content').slideToggle();
 });
 
 });

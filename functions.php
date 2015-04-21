@@ -58,11 +58,11 @@ function echoVideos($videos) {
 	echo '<ul class="videos">';
 	if (!empty($videos)) {
 		foreach ($videos as $name=>$season) {
-			echo '<li>'.$name.'<ul>';
+			echo '<li class="videos__show"><span class="toggle">'.$name.'</span><ul class="videos__seasons toggle__content">';
 			foreach ($videos[$name] as $season=>$episode) {
-				echo '<li>'.$season.'<ul>';
+				echo '<li class="videos__season"><span class="toggle">Season '.$season.'</span><ul class="videos__episodes toggle__content">';
 				foreach ($videos[$name][$season] as $episode=>$details) {
-					echo '<li>'.$episode.' - '.$details['path'].'</li>';
+					echo '<li class="videos__episode">Episode '.$episode.' - '.$details['path'].'</li>';
 				}
 				echo '</ul></li>';
 			}

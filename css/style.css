@@ -12,9 +12,34 @@ body {
 	cursor: pointer;
 }
 
-.videos > li {
-	cursor: pointer;
+ul, li {
+	display: block;
+	list-style-type: none;
+	margin: 0; padding: 0;
 }
-.videos > li > ul {
+
+.toggle {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+.toggle__content {
 	display: none;
+}
+
+.videos__show {
+
+}
+.videos__seasons {
+	padding-bottom: 20px;
+}
+.videos__season {
+}
+.videos__episodes {
+	padding-bottom: 20px;
+}
+.videos__episode {
 }

@@ -13,11 +13,12 @@ require 'config.php';
 <div class="status"></div>
 <?php
 /*
-	To do
+	To dos:
 	Make it run saveVideos once an hour, storing up all the stuff
 	Make it flexbox, with a nice VHS logo or something
 	check it doesn't bork up with Films (2014)
-	IP security
+	IP security, just the fact it's a local server 127.0.0.1 should be enough actually
+	or (no need for input) just use icanhazip and test against REMOTE_ADDR
 	Proper $dir
 */
 

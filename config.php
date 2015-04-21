@@ -1,7 +1,16 @@
-<?php
-error_reporting(E_ALL);
-
+<?php error_reporting(E_ALL);
 require 'functions.php';
+
+$debugging = false;
+
+if ($debugging==true) echo '<pre>';
+
+if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1' && $_SERVER['REMOTE_ADDR'] != $_SERVER['HTTP_HOST']) {
+	echo 'Video Vault can only be accessed locally, rather than from: '.$_SERVER['REMOTE_ADDR'];
+	die();
+}
+
+
 $servername = "localhost";
 $database = "video-helper";
 $username = "root";
@@ -28,7 +37,8 @@ catch(PDOException $e) {
 }
 
 
-$debugging = false;
+
+
 
 // Path must be the full, escaped path, e.g. $dir = 'C:\wherever';
 #$dir = "\\\\evermore\\unsorted";
@@ -40,10 +50,6 @@ $videos = [];
 
 
 
-if ($debugging==true) {
-	echo '<pre>';
-	array_push($videoFiletypes, 'txt');
-}
 set_time_limit(600);
 
 ?>

@@ -5,9 +5,15 @@ require 'config.php';
 <html>
 <head>
 	<title>Video Vault</title>
+	<link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+	<link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 	<link href="css/style.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
+
+<a class="header__logo" href="/"><img src="images/header_logo.png" alt="Video Vault" /></a>
+<div class="header__title">Video<br />Vault</div>
 <div class="button saveVideos clear">Save Videos</div>
 <div class="button clearVideos clear">Clear Videos</div>
 <div class="status"></div>

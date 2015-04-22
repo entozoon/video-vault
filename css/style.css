@@ -1,16 +1,37 @@
 body {
 	font-size: 20px;
-	font-family: arial;
+	font-family: 'Play', sans-serif;
 }
 .left { float: left; }
 .clear { clear: both; }
 .button {
 	display: inline-block;
 	padding: 10px 15px;
+	margin: 0 0 20px;
 	border: 1px solid;
 	background: #eee;
 	cursor: pointer;
 }
+.button + .button { margin-left: 10px; }
+
+a:hover { opacity: 0.8; }
+
+.header__logo {
+	display: block;
+	clear: both;
+	margin: 0 0 20px;
+}
+.header__title {
+	padding: 0 0 0 100px;
+	margin: 0 0 20px;
+	min-height: 74px;
+	background: url(../images/header_idea.png) no-repeat left center;
+	font-size: 35px;
+	line-height: 1;
+	color: #555;
+	font-weight: bold;
+}
+
 
 ul, li {
 	display: block;

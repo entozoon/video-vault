@@ -25,6 +25,7 @@ require 'config.php';
 	check it doesn't bork up with Films (2014)
 	IP security, just the fact it's a local server 127.0.0.1 should be enough actually
 	or (no need for input) just use icanhazip and test against REMOTE_ADDR
+	IN FACT, it's only ever gonna be on localhost so fuck it.
 	Proper $dir
 */
 

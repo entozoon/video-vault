@@ -6,6 +6,12 @@ require 'config.php';
 <head>
 	<title>Video Vault</title>
 	<link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+
+	<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0" />
+
+	<link rel="apple-touch-icon" sizes="57x57" href="images/app-icon-57.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="images/app-icon-72.png" />
+
 	<link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -42,6 +48,8 @@ require 'config.php';
 
 	Star a show
 	remains in list, but also appears at top, with ability to unstar (font awesome)
+
+	unwatched/watched buttons - watched should make all previous episodes and seasons watched!
 */
 
 
@@ -122,27 +130,30 @@ $('.clearVideos').click(function() {
 	})
 });
 
+resetWatchedClasses();
 
-// If a whole season/show has been viewed, set watched classes
-// This could be php'd, but let's take a load off it's shoulders.
-// Probably a more concise way of writing this but.. brainfart
-$('.videos__season').each(function() {
-	var watched = true;
-	$(this).find('.videos__episode').each(function() {
-		if (!$(this).hasClass('videos__episode--watched')) watched = false;
+});
+
+function resetWatchedClasses() {
+	// If a whole season/show has been viewed, set watched classes
+	// This could be php'd, but let's take a load off it's shoulders.
+	// Probably a more concise way of writing this but.. brainfart
+	$('.videos__season').removeClass('videos__seasion--watched').each(function() {
+		var watched = true;
+		$(this).find('.videos__episode').each(function() {
+			if (!$(this).hasClass('videos__episode--watched')) watched = false;
+		});
+		if (watched) $(this).addClass('videos__season--watched')	;
 	});
-	if (watched) $(this).addClass('videos__season--watched')	;
-});
-$('.videos__show').each(function() {
-	var watched = true;
-	$(this).find('.videos__season').each(function() {
-		if (!$(this).hasClass('videos__season--watched')) watched = false;
+	$('.videos__show').removeClass('videos__show--watched').each(function() {
+		var watched = true;
+		$(this).find('.videos__season').each(function() {
+			if (!$(this).hasClass('videos__season--watched')) watched = false;
+		});
+		if (watched) $(this).addClass('videos__show--watched')	;
 	});
-	if (watched) $(this).addClass('videos__show--watched')	;
-});
 
-
-});
+}
 
 function c(c) { console.log(c); }
 </script>

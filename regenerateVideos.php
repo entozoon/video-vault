@@ -2,6 +2,8 @@
 require 'config.php';
 
 
+clearVideos();
+
 
 function buildVideoArray($dir) {
 	global $videos;
@@ -14,6 +16,8 @@ function buildVideoArray($dir) {
 				buildVideoArray($dir.'\\'.$file);
 			} else {
 				$video = [];
+				$video['isShow'] = false;
+
 				// Store up some tasty info about the video
 				$explode = explode('.', $file);
 				$video['path'] = $dir.'\\'.$file;
@@ -21,11 +25,12 @@ function buildVideoArray($dir) {
 				array_pop($explode);
 				$video['name'] = implode('.', $explode);
 
-				// replace spaces with .
+				// If not a supported filetype, give up and go home
+				if (!in_array($video['filetype'], $videoFiletypes)) continue;
+
+				// replace spaces _ - with .
 				$video['fragments'] = $video['name'];
-				$video['fragments'] = str_replace(' ', '.', $video['fragments']);
-				// replace _ with .
-				$video['fragments'] = str_replace('_', '.', $video['fragments']);
+				$video['fragments'] = str_replace(array(' ','_','-'), '.', $video['fragments']);
 				// explode .
 				$video['fragments'] = explode('.', $video['fragments']);
 
@@ -50,6 +55,7 @@ function buildVideoArray($dir) {
 							$video['season'] = $thinking[1];
 							$video['episode'] = $thinking[2];
 							$video['episeasonPosition'] = $count;
+							$video['isShow'] = true;
 						}
 					}
 					// if 104 ..  1021 ..
@@ -60,19 +66,30 @@ function buildVideoArray($dir) {
 							$video['season'] = substr($fragment, 0, 1);
 							$video['episode'] = substr($fragment, 1);
 							$video['episeasonPosition'] = $count;
+							$video['isShow'] = true;
 						}
-						// 1021
-						else if (strlen($fragment)==4) {
+						// 1021, but not 19/20+ seasons as that's probably a YY year date
+						else if (strlen($fragment)==4 &&
+							//substr($fragment,0,2)!='19' &&
+							//substr($fragment,0,2)!='20') {
+							// Ignore stupid show names, such as say The 4400
+							(float)(substr($fragment,0,2))<=19) {
 							$video['season'] = substr($fragment, 0, 2);
 							$video['episode'] = substr($fragment, 2);
 							$video['episeasonPosition'] = $count;
+							$video['isShow'] = true;
 						}
 					}
 				}
 
+				// If video doesn't appear to be a show, probs a film so give up and go home
+				if ($video['isShow']==false) continue;
+
 				// strip any trailing zeros and such
 				if (!empty($video['season'])) $video['season'] = (float)$video['season'];
 				if (!empty($video['episode'])) $video['episode'] = (float)$video['episode'];
+
+				#echo '<pre>';print_r($video);
 
 				// Using the episode position, deduce the show name
 				if ($video['episeasonPosition']>0 || !empty($video['fragments'])) {
@@ -80,8 +97,6 @@ function buildVideoArray($dir) {
 					$video['name'] = implode(' ',$video['name']);
 				}
 
-				// If not a supported filetype, give up and go home
-				if (!in_array($video['filetype'], $videoFiletypes)) continue;
 
 				// remove unnecessary stuffs
 				unset($video['episeason']);
@@ -89,15 +104,21 @@ function buildVideoArray($dir) {
 				unset($video['filetype']);
 				unset($video['episeasonPosition']);
 
+
 				if (!empty($video['name'])) {
 					// strip silly chars from name
-					$video['name'] = str_replace(array("'",'-'),'',$video['name']);
+					$video['name'] = str_replace(array("'","(",")","[","]"),'',$video['name']);
+
+					// trim it up nice and tidy
+					$video['name'] = trim($video['name']);
 
 					// make it case insensitive
 					$video['name'] = ucwords(strtolower($video['name']));
 
 					// If we're golden, push to videos array
 					array_push($videos, $video);
+
+					#echo '<pre>';print_r($video);
 				}
 			}
 		}

@@ -59,3 +59,11 @@ dns server route list
 saveall
 ```
 (ignore any unknown command things, should #justwork)
+
+
+# Automatic Updating #
+Being a local site, we can't just set up a cron job, but on Windows a Task Scheduler event will do just fine.
+Open up Task Scheduler and Create Task.
+General - Run when logged on, click Change User or Group and type SYSTEM into the textarea (makes it run in background)
+Triggers - New - Begin the task: At log on, Repeat task every: 1 hour, for a duration of: Indefinitely
+Actions - Start a program: php - with the argument being the location of the regenerateVideos.php file, Start in: the root directory of video-vault

@@ -12,7 +12,7 @@ function clearVideos() {
 function getVideos() {
 	global $conn;
 
-	$sql = "SELECT * FROM videos";
+	$sql = "SELECT * FROM videos ORDER BY name";
 	$q = $conn->prepare($sql);
 	$q->execute();
 	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
@@ -42,7 +42,7 @@ function organiseVideos($videos) {
 // only run this on page load, rather than saveVideos
 function sortVideos($organised) {
 	foreach ($organised as $name=>$seasons) {
-		ksort($organised[$name]);
+		//ksort($organised[$name]); // should be order by name anyway
 		foreach ($organised[$name] as $season=>$ep) {
 			ksort($organised[$name][$season]);
 			foreach ($organised[$name][$season] as $episode=>$details) {

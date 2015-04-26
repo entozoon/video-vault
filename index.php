@@ -7,20 +7,41 @@ require 'config.php';
 	<title>Video Vault</title>
 	<link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
 	<link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<link href="css/style.css" rel="stylesheet" type="text/css">
-
 </head>
 <body>
+<?php if ($debugging==true) echo '<pre>'; ?>
 
 <a class="header__logo" href="/"><img src="images/header_logo.png" alt="Video Vault" /></a>
 <div class="header__title">Video<br />Vault</div>
-<div class="button saveVideos clear">Save Videos</div>
-<div class="button clearVideos clear">Clear Videos</div>
+<div class="button regenerateVideos clear">Regenerate Videos</div>
 <div class="status"></div>
 <?php
 /*
+
+
+
+
+
+
+						black books!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	To dos:
-	Make it run saveVideos once an hour, storing up all the stuff
+	Make it run regenerateVideos once an hour, storing up all the stuff
 	Make it flexbox, with a nice VHS logo or something
 	check it doesn't bork up with Films (2014)
 	IP security, just the fact it's a local server 127.0.0.1 should be enough actually
@@ -45,37 +66,21 @@ echoVideos($videos);
 <script type="text/javascript">
 $(function() {
 
-$('.saveVideos').click(function() {
-	$('.status').html('Saving videos..');
-
-	$.post('saveVideos.php', {
+$('.regenerateVideos').click(function() {
+	$('.videos, .regenerateVideos').remove();
+	$('.status').html('Regenerating videos <i class="fa fa-refresh fa-spin"></i>');
+	// regenerateVideos.php also clears videos
+	$.post('regenerateVideos.php', {
 	}, function(echo) {
 		//c(echo);
 	})
 	.fail(function(data) {
-		$('.status').html('Get videos error!');
+		$('.status').html('Regenerate videos error!');
 		c(data);
 	})
 	.done(function(data) {
 		$('.status').html('Videos saved, reloading..');
-		setTimeout(function() { location.reload(); }, 2000);
-	});
-});
-
-$('.clearVideos').click(function() {
-	$('.status').html('Clearing videos..');
-
-	$.post('clearVideos.php', {
-	}, function(echo) {
-		//c(echo);
-	})
-	.fail(function(data) {
-		$('.status').html('Clear videos error!');
-		c(data);
-	})
-	.done(function(data) {
-		$('.status').html('Videos cleared, reloading..');
-		setTimeout(function() { location.reload(); }, 2000);
+		setTimeout(function() { location.reload(); }, 500);
 	});
 });
 

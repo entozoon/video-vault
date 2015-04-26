@@ -1,25 +1,47 @@
 body {
 	font-size: 20px;
 	font-family: 'Play', sans-serif;
+	line-height: 1;
+	color: #3C477B;
 }
 .left { float: left; }
+.right { float: right; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 .clear { clear: both; }
 .button {
 	display: inline-block;
 	padding: 10px 15px;
 	margin: 0 0 20px;
-	border: 1px solid;
+	border-radius: 30px;
 	background: #eee;
 	cursor: pointer;
+	text-align: center;
+	color: white;
+	text-shadow: 0 0 1px rgba(0,0,0,1);
+	box-shadow: inset 0 0 1px 0px rgba(0,0,0,0.3);
+
+	background: -moz-linear-gradient(-45deg, #fcf6fd 15%, #f9f321 17%, #f54f14 41%, #d34066 69%, #475389 92%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(15%,#fcf6fd), color-stop(17%,#f9f321), color-stop(41%,#f54f14), color-stop(69%,#d34066), color-stop(92%,#475389)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-45deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 92%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-45deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 92%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-45deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 92%); /* IE10+ */
+	background: linear-gradient(135deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 92%); /* W3C */
 }
 .button + .button { margin-left: 10px; }
 
+.button:hover,
 a:hover { opacity: 0.8; }
+
+.header {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
 
 .header__logo {
 	display: block;
 	clear: both;
-	margin: 0 0 20px;
+}
 }
 .header__title {
 	padding: 0 0 0 100px;
@@ -52,7 +74,7 @@ ul, li {
 }
 
 .videos__show {
-
+	padding: 2px 0;
 }
 .videos__seasons {
 	padding-bottom: 20px;

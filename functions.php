@@ -42,12 +42,12 @@ function organiseVideos($videos) {
 // only run this on page load, rather than saveVideos
 function sortVideos($organised) {
 	foreach ($organised as $name=>$seasons) {
-		//ksort($organised[$name]); // should be order by name anyway
+		ksort($organised[$name]); // organises seasons (within $organised[$name])
 		foreach ($organised[$name] as $season=>$ep) {
-			ksort($organised[$name][$season]);
-			foreach ($organised[$name][$season] as $episode=>$details) {
+			ksort($organised[$name][$season]); // organise shows
+			/*foreach ($organised[$name][$season] as $episode=>$details) {
 				ksort($organised[$name][$season][$episode]);
-			}
+			}*/
 		}
 	}
 	return $organised;
@@ -62,7 +62,7 @@ function echoVideos($videos) {
 			foreach ($videos[$name] as $season=>$episode) {
 				echo '<li class="videos__season"><span class="toggle">Season '.$season.'</span><ul class="videos__episodes toggle__content">';
 				foreach ($videos[$name][$season] as $episode=>$details) {
-					echo '<li class="videos__episode" data-path="'.$details['path'].'">Episode '.$episode.' - '.$details['path'].'</li>';
+					echo '<li class="videos__episode" data-path="'.$details['path'].'">Episode '.$episode.'</li>';
 				}
 				echo '</ul></li>';
 			}

@@ -1,7 +1,7 @@
 <?php error_reporting(E_ALL);
 require 'functions.php';
 
-$debugging = true;
+$debugging = false;
 
 
 /*
@@ -42,12 +42,9 @@ catch(PDOException $e) {
 
 
 
-// Path must be the full, escaped path, e.g. $dir = 'C:\wherever';
-#$dir = "\\\\evermore\\unsorted";
+// Path should be the full, escaped path, e.g. $dir = 'C:\wherever';
 #$dir = "unsorted";
-#$dir = 'E:\www\m.ichael\video-vault\Unsorted';
-#$dir = 'r:\manor\unsorted';
-$dir = '_myke_manor';
+$dir = "r:\manor\unsorted";
 
 $videoFiletypes = ['webm','mkv','flv','vob','ogv','avi','mov','yuv','rm','rmvb','asf','mp4','m4p','m4v','mpg','mp2','mpeg','mpe','mpv','mpg','mpeg','m2v','m4v','3gp','3g2','nsv','h264'];
 $videos = [];

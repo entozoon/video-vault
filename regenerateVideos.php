@@ -73,7 +73,7 @@ function buildVideoArray($dir) {
 							//substr($fragment,0,2)!='19' &&
 							//substr($fragment,0,2)!='20') {
 							// Ignore stupid show names, such as say The 4400
-							(float)(substr($fragment,0,2))<=19) {
+							(float)(substr($fragment,0,2))<19) {
 							$video['season'] = substr($fragment, 0, 2);
 							$video['episode'] = substr($fragment, 2);
 							$video['episeasonPosition'] = $count;

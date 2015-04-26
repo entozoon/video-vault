@@ -45,7 +45,7 @@ require 'config.php';
 $videos = getVideos();
 $videos = organiseVideos($videos);
 $videos = sortVideos($videos);
-#print_r($videos);
+#echo '<pre>';print_r($videos);
 echoVideos($videos);
 
 
@@ -87,7 +87,8 @@ $('.videos__episode').click(function() {
 	$('.status').html('Playing video..');
 
 	$.post('playVideo.php', {
-		path: $(this).attr('data-path')
+		path: $(this).attr('data-path'),
+		id: $(this).attr('data-id')
 	}, function(echo) {
 		c(echo);
 	})

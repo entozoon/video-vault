@@ -3,6 +3,7 @@ body {
 	font-family: 'Play', sans-serif;
 	line-height: 1;
 	color: #3C477B;
+	padding-bottom: 20px;
 }
 .left { float: left; }
 .right { float: right; }
@@ -12,7 +13,6 @@ body {
 .button {
 	display: inline-block;
 	padding: 18px 7px;
-	margin: 0 0 20px;
 	border-radius: 60px;
 	background: #eee;
 	cursor: pointer;
@@ -29,6 +29,8 @@ body {
 	background: linear-gradient(135deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 85%); /* W3C */
 }
 .button + .button { margin-left: 10px; }
+
+.fa-right { margin-left: 5px;}
 
 .button:hover,
 a:hover { opacity: 0.8; }
@@ -57,6 +59,7 @@ a:hover { opacity: 0.8; }
 
 ul, li {
 	display: block;
+	clear: both;
 	list-style-type: none;
 	margin: 0; padding: 0;
 }
@@ -73,20 +76,56 @@ ul, li {
 	display: none;
 }
 
+.videos {
+	display: block;
+	clear: both;
+	overflow: hidden;
+
+	padding: 0 0 50px;
+}
+.videos ul, .videos li {
+}
 .videos__show {
+	overflow: hidden;
 	padding: 2px 0;
 }
-.videos__seasons {
-	padding-bottom: 20px;
+.videos__show + .videos__show { border-top: 1px solid #ccf; }
+.videos__seasons,
+.videos__episodes {
+	padding: 5px 0 10px 15px;
+	overflow: hidden;
+
 }
 .videos__season {
 }
-.videos__episodes {
-	padding-bottom: 20px;
-}
 .videos__episode {
+	float: left;
+	clear: both;
 	cursor: pointer;
+	font-size: 18px;
+	padding: 2px 0;
 }
+.videos__show--watched,
+.videos__season--watched,
 .videos__episode--watched {
-	opacity: 0.5;
+	opacity: 0.6;
+}
+.videos__episode--playing {
+	position: relative;
+}
+.videos__episode--playing:after {
+	position: relative;
+	display: inline-block;
+	margin: 2px 0 0 5px;
+	content: "\f04b ";
+	font-family: fontawesome;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 75%;
+	vertical-align: top;
+}
+
+.clearVideos {
+	font-size: 12px;
+	padding: 5px
 }

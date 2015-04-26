@@ -21,8 +21,8 @@ require 'config.php';
 			<a class="header__logo" href="/"><img src="images/header_logo.png" alt="Video Vault" /></a>
 		</div>
 		<div class="col-xs-6 text-right">
-			<div class="button regenerateVideos">Update<br />Videos</div>
 			<div class="status clear"></div>
+			<div class="button regenerateVideos">Update<br />Videos</div>
 		</div>
 	</div>
 
@@ -39,6 +39,9 @@ require 'config.php';
 	or (no need for input) just use icanhazip and test against REMOTE_ADDR
 	IN FACT, it's only ever gonna be on localhost so fuck it.
 	Proper $dir
+
+	Star a show
+	remains in list, but also appears at top, with ability to unstar (font awesome)
 */
 
 
@@ -52,6 +55,7 @@ echoVideos($videos);
 #echo "\n\n\n\n\n";print_r($videos);
 
 ?>
+			<div class="button clearVideos">Clear Videos<br />(wipes everything!)</div>
 		</div>
 	</div>
 </div>
@@ -84,22 +88,59 @@ $('.videos .toggle').click(function() {
 
 
 $('.videos__episode').click(function() {
-	$('.status').html('Playing video..');
+	//$('.status').html('Playing video..');
+	$('.videos__episode').removeClass('videos__episode--playing')
+	$(this).addClass('videos__episode--watched videos__episode--playing');
 
 	$.post('playVideo.php', {
 		path: $(this).attr('data-path'),
 		id: $(this).attr('data-id')
 	}, function(echo) {
-		c(echo);
+		//c(echo);
 	})
 	.fail(function(data) {
 		$('.status').html('Playing video error!');
 		c(data);
 	})
 	.done(function(data) {
-		$('.status').html();
 	})
 });
+
+
+$('.clearVideos').click(function() {
+	//$('.status').html('Playing video..');
+	$.post('clearVideos.php', {
+	}, function(echo) {
+		//c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('Clear videos error!');
+		c(data);
+	})
+	.done(function(data) {
+		location.reload();
+	})
+});
+
+
+// If a whole season/show has been viewed, set watched classes
+// This could be php'd, but let's take a load off it's shoulders.
+// Probably a more concise way of writing this but.. brainfart
+$('.videos__season').each(function() {
+	var watched = true;
+	$(this).find('.videos__episode').each(function() {
+		if (!$(this).hasClass('videos__episode--watched')) watched = false;
+	});
+	if (watched) $(this).addClass('videos__season--watched')	;
+});
+$('.videos__show').each(function() {
+	var watched = true;
+	$(this).find('.videos__season').each(function() {
+		if (!$(this).hasClass('videos__season--watched')) watched = false;
+	});
+	if (watched) $(this).addClass('videos__show--watched')	;
+});
+
 
 });
 

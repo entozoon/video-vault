@@ -11,6 +11,8 @@ require 'config.php';
 
 	<link rel="apple-touch-icon" sizes="57x57" href="images/app-icon-57.png" />
 	<link rel="apple-touch-icon" sizes="72x72" href="images/app-icon-72.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="images/app-icon-114.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="images/app-icon-144.png" />
 
 	<link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -63,7 +65,8 @@ echoVideos($videos);
 #echo "\n\n\n\n\n";print_r($videos);
 
 ?>
-			<div class="button clearVideos">Clear Videos<br />(wipes everything!)</div>
+			<div class="button button--small clearVideos">Clear Videos<br />(wipes everything!)</div>
+			<?php //part of update videos /*<div class="button button--small checkDeletedVideos">Remove Deleted Videos</div>*/ ?>
 		</div>
 	</div>
 </div>
@@ -130,6 +133,22 @@ $('.clearVideos').click(function() {
 	})
 });
 
+/*
+$('.checkDeletedVideos').click(function() {
+	//$('.status').html('Playing video..');
+	$.post('checkDeletedVideos.php', {
+	}, function(echo) {
+		//c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('checkDeletedVideos error!');
+		c(data);
+	})
+	.done(function(data) {
+		location.reload();
+	})
+});
+*/
 resetWatchedClasses();
 
 });

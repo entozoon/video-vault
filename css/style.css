@@ -28,6 +28,10 @@ body {
 	background: -ms-linear-gradient(-45deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 85%); /* IE10+ */
 	background: linear-gradient(135deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 85%); /* W3C */
 }
+.button.button--small {
+	font-size: 12px;
+	padding: 5px
+}
 .button + .button { margin-left: 10px; }
 
 .fa-right { margin-left: 5px;}
@@ -43,7 +47,7 @@ a:hover { opacity: 0.8; }
 .header__logo {
 	display: block;
 	clear: both;
-}
+	float: left;
 }
 .header__title {
 	padding: 0 0 0 100px;
@@ -123,9 +127,4 @@ ul, li {
 	font-weight: normal;
 	font-size: 75%;
 	vertical-align: top;
-}
-
-.clearVideos {
-	font-size: 12px;
-	padding: 5px
 }

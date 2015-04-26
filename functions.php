@@ -47,7 +47,7 @@ function echoVideos($videos) {
 				foreach ($videos[$name][$season] as $episode=>$details) {
 					$classes = 'videos__episode';
 					if ($details['watched']==1) $classes .= ' videos__episode--watched';
-					echo '<li class="'.$classes.'" data-id="'.$details['id'].'" data-path="'.$details['path'].'">Episode '.$episode.'<i class="fa fa-eye"></i><i class="fa fa-eye-slash"></i></li>';
+					echo '<li class="'.$classes.'" data-id="'.$details['id'].'" data-path="'.$details['path'].'">Episode '.$episode.'<i class="fa fa-eye"></i><i class="fa fa-eye-slash"></i><i class="fa fa-ellipsis-h"></i></li>';
 				}
 				echo '</ul></li>';
 			}

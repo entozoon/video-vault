@@ -1,5 +1,15 @@
 <?php
 require 'config.php';
+
+if (!empty($_POST)) {
+	if (isset($_POST['executable'])) { // allow null
+		setSetting('executable', $_POST['executable']);
+	}
+	if (isset($_POST['stop'])) { // allow null
+		setSetting('stop', $_POST['stop']);
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,6 +41,9 @@ require 'config.php';
 		<div class="col-xs-6 text-right">
 			<div class="status clear"></div>
 			<div class="button regenerateVideos">Update<br />Videos</div>
+			<?php if (!empty(getSetting('stop'))) { ?>
+				<div class="button stopPlayback">Stop<br />Playback</div>
+			<?php } ?>
 		</div>
 	</div>
 
@@ -65,8 +78,26 @@ echoVideos($videos);
 #echo "\n\n\n\n\n";print_r($videos);
 
 ?>
-			<div class="button button--small clearVideos">Clear Videos<br />(wipes everything!)</div>
+			<hr />
+			<h1>Admin</h1>
 			<?php //part of update videos /*<div class="button button--small checkDeletedVideos">Remove Deleted Videos</div>*/ ?>
+			<form action="" method="post">
+				<label><strong>Executable path and parameters, for example:</strong></label>
+				<div contentEditable="true">taskkill /f /im vlc.exe &amp; "e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0</div>
+				<input type="text" name="executable" placeholder='Empty (uses default program)' value="<?php echo htmlentities(getSetting('executable')); ?>" />
+				<button type="submit" class="button button--small">Submit</button>
+			</form>
+			<br /><br />
+
+			<form action="" method="post">
+				<label><strong>Executable to stop videos, for example:</strong></label>
+				<div contentEditable="true">taskkill /f /im vlc.exe</div>
+				<input type="text" name="stop" placeholder='Empty (removes functionality)' value="<?php echo htmlentities(getSetting('stop')); ?>" />
+				<button type="submit" class="button button--small">Submit</button>
+			</form>
+			<br /><br />
+
+			<div class="button button--small clearVideos">Clear Videos<br />(wipes everything!)</div>
 		</div>
 	</div>
 </div>
@@ -93,6 +124,19 @@ $('.regenerateVideos').click(function() {
 	});
 });
 
+$('.stopPlayback').click(function() {
+	$.post('stopPlayback.php', {
+	}, function(echo) {
+		c(echo);
+	})
+	.fail(function(data) {
+		$('.status').html('Stop playback error!');
+		c(data);
+	})
+	.done(function(data) {
+	})
+});
+
 $('.videos .toggle').click(function() {
 	$(this).siblings('.toggle__content').slideToggle();
 });
@@ -107,7 +151,7 @@ $('.videos__episode').click(function() {
 		path: $(this).attr('data-path'),
 		id: $(this).attr('data-id')
 	}, function(echo) {
-		//c(echo);
+		c(echo);
 	})
 	.fail(function(data) {
 		$('.status').html('Playing video error!');

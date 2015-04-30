@@ -71,11 +71,15 @@ function playVideo($path, $id) {
 	setWatched($id);
 
 	#echo $path;
-	echo shell_exec('start "Opened by Video Vault" "'.$path.'" && exit');
-	/*
-	$commandString = "start /b c:\\php\\php.EXE C:\\Inetpub\\wwwroot\\mysite.com\\phpforktest.php --passmsg=$testmsg";
-	pclose(popen($commandString, 'r'));
-	*/
+	$executable = getSetting('executable');
+	if (empty($executable)) {
+		$cmd = 'start "Opened by Video Vault" "'.$path.'" && exit';
+	} else {
+		$cmd = $executable.' "'.$path.'"';
+	}
+
+	echo $cmd;
+	echo shell_exec($cmd);
 }
 
 
@@ -311,6 +315,57 @@ function checkForDeletedVideos() {
 	foreach ($videos as $video) {
 		if (!file_exists($video['path'])) deleteVideoByID($video['id']);
 	}
+
 }
+
+
+function setSetting($key, $value) {
+	global $conn;
+	#print_r("Setting: ".$key."=>".$value);
+
+	// Check if setting key exists
+	$result = getSetting($key);
+
+	// If not, create an empty one
+	if (empty($result)) {
+		$sql = "INSERT INTO settings VALUES (NULL,:key,'')";
+		$q = $conn->prepare($sql);
+		$q->bindParam(':key', $key, PDO::PARAM_STR);
+		$q->execute();
+		if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+	}
+
+	// Jam in our given value
+	$sql = "UPDATE settings SET value=:value WHERE `key`=:key";
+	$q = $conn->prepare($sql);
+	$q->bindParam(':key', $key, PDO::PARAM_STR);
+	$q->bindParam(':value', $value, PDO::PARAM_STR);
+	$q->execute();
+	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+
+	return true;
+}
+
+function getSetting($key) {
+	global $conn;
+
+	$sql = "SELECT `value` FROM settings
+		WHERE `key` = :key";
+	$q = $conn->prepare($sql);
+	$q->bindParam(':key', $key, PDO::PARAM_STR);
+	$q->execute();
+	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+	$result = $q->fetchAll();
+
+	if (empty($result)) return '';
+	else return $result[0]['value'];
+}
+
+function stopPlayback() {
+	$cmd = getSetting('stop');
+	echo $cmd;
+	echo shell_exec($cmd);
+}
+
 
 ?>

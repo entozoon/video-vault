@@ -70,6 +70,8 @@ function setWatched($id) {
 function playVideo($path, $id) {
 	setWatched($id);
 
+	stopPlayback();
+
 	#echo $path;
 	$executable = getSetting('executable');
 	if (empty($executable)) {
@@ -363,8 +365,10 @@ function getSetting($key) {
 
 function stopPlayback() {
 	$cmd = getSetting('stop');
-	echo $cmd;
-	echo shell_exec($cmd);
+	if (!empty($cmd)) {
+		echo $cmd;
+		echo shell_exec($cmd);
+	}
 }
 
 

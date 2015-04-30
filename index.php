@@ -83,7 +83,7 @@ echoVideos($videos);
 			<?php //part of update videos /*<div class="button button--small checkDeletedVideos">Remove Deleted Videos</div>*/ ?>
 			<form action="" method="post">
 				<label><strong>Executable path and parameters, for example:</strong></label>
-				<div contentEditable="true">taskkill /f /im vlc.exe &amp; "e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0</div>
+				<div contentEditable="true">"e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0</div>
 				<input type="text" name="executable" placeholder='Empty (uses default program)' value="<?php echo htmlentities(getSetting('executable')); ?>" />
 				<button type="submit" class="button button--small">Submit</button>
 			</form>

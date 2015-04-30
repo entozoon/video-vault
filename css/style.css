@@ -12,12 +12,13 @@ body {
 .clear { clear: both; }
 .button {
 	display: inline-block;
-	padding: 18px 7px;
+	padding: 20px 7px;
 	border-radius: 60px;
 	background: #eee;
 	cursor: pointer;
 	text-align: center;
 	color: white;
+	font-size: 18px;
 	border: none;
 	outline: none;
 	text-shadow: 0 0 1px rgba(0,0,0,1);

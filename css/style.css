@@ -1,3 +1,7 @@
+/* By default, everything renders as border-box */
+*, *:before, *:after {
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
 body {
 	font-size: 22px;
 	font-family: 'Play', sans-serif;
@@ -11,8 +15,12 @@ body {
 .text-right { text-align: right; }
 .clear { clear: both; }
 .button {
+	position: relative;
 	display: inline-block;
+	vertical-align: top;
 	padding: 20px 7px;
+	min-height: 75px;
+	min-width: 75px;
 	border-radius: 60px;
 	background: #eee;
 	cursor: pointer;
@@ -31,11 +39,20 @@ body {
 	background: -ms-linear-gradient(-45deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 85%); /* IE10+ */
 	background: linear-gradient(135deg, #fcf6fd 15%,#f9f321 17%,#f54f14 41%,#d34066 69%,#475389 85%); /* W3C */
 }
+.button.button--medium {
+	font-size: 16px;
+	padding: 10px 15px;
+	min-height: 0;
+	min-width: 0;
+}
 .button.button--small {
 	font-size: 12px;
-	padding: 5px
+	padding: 5px;
+	min-height: 0;
+	min-width: 0;
 }
 .button + .button { margin-left: 10px; }
+.button span { position: relative; }
 
 .fa-right { margin-left: 5px;}
 
@@ -61,6 +78,24 @@ a:hover { opacity: 0.8; }
 	line-height: 1;
 	color: #555;
 	font-weight: bold;
+}
+
+.stopPlayback {
+	padding-bottom: 0;
+}
+.stopPlayback__fa {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -20px;
+	margin-left: -10px;
+	width: 20px;
+	height: 20px;
+	background: white;
+	box-shadow: inset 0 0 2px 1px rgba(120,0,0,0.75);
+}
+.stopPlayback__content {
+	margin-top: 22px;
 }
 
 
@@ -140,4 +175,8 @@ input {
 input, button[type=submit] {
 	display: block;
 	clear: both;
+}
+
+hr { /* styled by bootstrap */
+	border-color: #d7dbec;
 }

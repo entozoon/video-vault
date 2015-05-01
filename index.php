@@ -2,11 +2,14 @@
 require 'config.php';
 
 if (!empty($_POST)) {
-	if (isset($_POST['executable'])) { // allow null
-		setSetting('executable', $_POST['executable']);
-	}
-	if (isset($_POST['stop'])) { // allow null
-		setSetting('stop', $_POST['stop']);
+	if (isset($_POST['settings'])) {
+		$settings = $_POST['settings'];
+		// Set any old setting, not particularly secure but we're not public
+		foreach ($settings as $key => $value) {
+			if (isset($settings[$key])) { // allow null
+				setSetting($key, $value);
+			}
+		}
 	}
 }
 
@@ -42,7 +45,10 @@ if (!empty($_POST)) {
 			<div class="status clear"></div>
 			<div class="button regenerateVideos">Update<br />Videos</div>
 			<?php if (!empty(getSetting('stop'))) { ?>
-				<div class="button stopPlayback">Stop<br />Playback</div>
+				<div class="button stopPlayback">
+					<div class="stopPlayback__fa"></div>
+					<div class="stopPlayback__content">Stop</div>
+				</div>
 			<?php } ?>
 		</div>
 	</div>
@@ -82,22 +88,28 @@ echoVideos($videos);
 			<h1>Admin</h1>
 			<?php //part of update videos /*<div class="button button--small checkDeletedVideos">Remove Deleted Videos</div>*/ ?>
 			<form action="" method="post">
+
+				<label><strong>Video Folder, for example:</strong></label>
+				<div contentEditable="true">r:\manor\unsorted</div>
+				<input type="text" name="settings[videofolder]" placeholder="Empty (won't work!!)" value="<?php echo htmlentities(getSetting('videofolder')); ?>" />
+				<br />
+
 				<label><strong>Executable path and parameters, for example:</strong></label>
 				<div contentEditable="true">"e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0</div>
-				<input type="text" name="executable" placeholder='Empty (uses default program)' value="<?php echo htmlentities(getSetting('executable')); ?>" />
-				<button type="submit" class="button button--small">Submit</button>
-			</form>
-			<br /><br />
+				<input type="text" name="settings[executable]" placeholder='Empty (uses default program)' value="<?php echo htmlentities(getSetting('executable')); ?>" />
+				<br />
 
-			<form action="" method="post">
 				<label><strong>Executable to stop videos, for example:</strong></label>
 				<div contentEditable="true">taskkill /f /im vlc.exe</div>
-				<input type="text" name="stop" placeholder='Empty (removes functionality)' value="<?php echo htmlentities(getSetting('stop')); ?>" />
-				<button type="submit" class="button button--small">Submit</button>
-			</form>
-			<br /><br />
+				<input type="text" name="settings[Stop]" placeholder='Empty (removes functionality)' value="<?php echo htmlentities(getSetting('stop')); ?>" />
+				<br />
 
+				<button type="submit" class="button button--medium">Submit</button>
+			</form>
+			<br />
+			<hr />
 			<div class="button button--small clearVideos">Clear Videos<br />(wipes everything!)</div>
+			<hr />
 		</div>
 	</div>
 </div>

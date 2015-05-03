@@ -65,12 +65,15 @@ if (!empty($_POST)) {
 	IP security, just the fact it's a local server 127.0.0.1 should be enough actually
 	or (no need for input) just use icanhazip and test against REMOTE_ADDR
 	IN FACT, it's only ever gonna be on localhost so fuck it.
-	Proper $dir
+
+	// kinda works for positioning, not ideal
+	vlc.exe --no-embedded-video --no-qt-video-autoresize --autoscale --width=200 --height=10 --video-x=100 --video-y=100 e:\silver.avi
 
 	Star a show
 	remains in list, but also appears at top, with ability to unstar (font awesome)
 
 	unwatched/watched buttons - watched should make all previous episodes and seasons watched!
+
 */
 
 

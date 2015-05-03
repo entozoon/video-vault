@@ -80,7 +80,7 @@ function playVideo($path, $id) {
 		$cmd = $executable.' "'.$path.'"';
 	}
 
-	echo $cmd;
+	echo $cmd."\n";
 	echo shell_exec($cmd);
 }
 
@@ -371,7 +371,7 @@ function getSetting($key) {
 function stopPlayback() {
 	$cmd = getSetting('stop');
 	if (!empty($cmd)) {
-		echo $cmd;
+		echo $cmd."\n";
 		echo shell_exec($cmd);
 	}
 }

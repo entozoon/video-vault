@@ -69,6 +69,7 @@ a:hover { opacity: 0.8; }
 	clear: both;
 	float: left;
 }
+.header__logo img { display: block; }
 .header__title {
 	padding: 0 0 0 100px;
 	margin: 0 0 20px;
@@ -179,4 +180,26 @@ input, button[type=submit] {
 
 hr { /* styled by bootstrap */
 	border-color: #d7dbec;
+}
+
+/* Mobile tweaks */
+@media (max-width: 767px) {
+
+.header {
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+.header__logo img { width: 100%; height: auto; }
+.button {
+	padding: 15px 0px 0;
+	/*margin-top: 5px;*/
+	min-height: 60px;
+	min-width: 60px;
+	font-size: 14px;
+}
+.button + .button { margin-left: 0; }
+.stopPlayback__content {
+	margin-top: 17px;
+}
+
 }

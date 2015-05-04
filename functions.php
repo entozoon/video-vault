@@ -86,15 +86,13 @@ function playVideo($path, $id) {
 
 
 
-function buildVideoArray() {
+function buildVideoArray($dir) {
 	global $videos;
 	global $videoFiletypes;
 
-	$videofolder = getSetting('videofolder');
+	if (empty($dir)) { $videos = ''; return false; }
 
-	if (empty($videofolder)) { $videos = ''; return false; }
-
-	$files = scandir($videofolder, SCANDIR_SORT_ASCENDING);
+	$files = scandir($dir, SCANDIR_SORT_ASCENDING);
 
 	foreach ($files as $file) {
 		if ($file != '.' && $file != '..') {

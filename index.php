@@ -98,7 +98,7 @@ echoVideos($videos);
 				<br />
 
 				<label><strong>Executable path and parameters, for example:</strong></label>
-				<div contentEditable="true">"e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0</div>
+				<div contentEditable="true">"e:\Program Files\vlc\vlc.exe" -I qt --fullscreen --qt-fullscreen-screennumber=0 --directx-volume=1.25</div>
 				<input type="text" name="settings[executable]" placeholder='Empty (uses default program)' value="<?php echo htmlentities(getSetting('executable')); ?>" />
 				<br />
 

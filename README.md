@@ -7,6 +7,8 @@ Have a quick glance through this readme, and if it looks too complicated.. then 
 # Requirements
 Must be run on an apache server on the computer that contains the video files
 
+AutoIt is required if adding extra control script buttons, such as for play/pause/volume/step
+
 # Installation
 - Apache and MySQL MUST be running from commandline not wamp or whatever.
   You might wish to look at the file _Start_Apache_and_Mysql_Example.bat which is an example batch script to start Apache and MySQL for someone who has them installed via Wamp.

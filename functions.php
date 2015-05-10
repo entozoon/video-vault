@@ -70,7 +70,7 @@ function setWatched($id) {
 function playVideo($path, $id) {
 	setWatched($id);
 
-	stopPlayback();
+	//stopPlayback();
 
 	#echo $path;
 	$executable = getSetting('executable');

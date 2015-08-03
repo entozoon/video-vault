@@ -7,7 +7,7 @@ require 'config.php';
 
 echo 'Checking for deleted videos..<br />';
 checkForDeletedVideos();
-echo 'Building video array..<br />';
+echo 'Building video array from: '.getSetting('videofolder').'..<br />';
 buildVideoArray(getSetting('videofolder'));
 echo 'Organising and saving videos..<br />';
 organiseAndSaveVideos();

@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 CREATE TABLE IF NOT EXISTS `videos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
+  `nameSort` text NOT NULL,
   `season` int(11) NOT NULL,
   `episode` int(11) NOT NULL,
   `path` text NOT NULL,

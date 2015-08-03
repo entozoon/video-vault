@@ -147,11 +147,13 @@ ul, li {
 	cursor: pointer;
 	font-size: 80%;
 	padding: 4px 0;
+	text-decoration: underline;
 }
 .videos__show--watched,
 .videos__season--watched,
 .videos__episode--watched {
 	opacity: 0.6;
+	text-decoration: none;
 }
 .videos__episode--playing {
 	position: relative;

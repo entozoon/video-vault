@@ -12,7 +12,7 @@ function clearVideos() {
 function getVideos() {
 	global $conn;
 
-	$sql = "SELECT * FROM videos ORDER BY name";
+	$sql = "SELECT * FROM videos ORDER BY nameSort";
 	$q = $conn->prepare($sql);
 	$q->execute();
 	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
@@ -24,6 +24,8 @@ function getVideos() {
 
 // only run this on page load, rather than saveVideos
 function sortVideos($organised) {
+	#echo '<pre>';print_r($organised);
+
 	foreach ($organised as $name=>$seasons) {
 		ksort($organised[$name]); // organises seasons (within $organised[$name])
 		foreach ($organised[$name] as $season=>$ep) {
@@ -118,17 +120,23 @@ function buildVideoArray($dir) {
 				// explode .
 				$video['fragments'] = explode('.', $video['fragments']);
 
+				#echo '<pre>'; print_r($video);
+				#echo '<pre>';
+				#print_r($video['fragments']);
 				// find episode number...
-				$video['episeason'] = $video['season'] = $video['episode'] = '';
+				$video['episeason'] = $video['season'] = $video['episode'] = null;
 				$count = -1;
 				foreach ($video['fragments'] as $fragment) {
 					$count++;
 					if ($count==0) continue; // not going to be at the start of the file
-					if (!empty($video['episeason'])) continue;
-					if ($video['season']!='' && $video['episode']!='') continue;
+					#echo '.';print_r($fragment);echo '.';
 
+					if (!empty($video['episeason']) && $video['episeason']!='') continue;
+
+					if (!empty($video['season'] && !empty($video['episode']))) continue;
 					// if s1e4 .. s01e04 s10e021 ..
 					if (!is_numeric($fragment)) {
+						#echo $fragment;
 						$pattern = '/^[Ss][0-9]+[Ee][0-9]+/';
 						if (preg_match($pattern, $fragment)) {
 
@@ -163,6 +171,11 @@ function buildVideoArray($dir) {
 							$video['episeasonPosition'] = $count;
 							$video['isShow'] = true;
 						}
+						// mykemod - blanking episeason.. because.. say with Archer.2009.S01E01
+						// it finds 2009, using episeason to test it, then it stops looping through fragments
+						// and doesn't continue on to find S01E01 afterward - which should take priority.
+						// (better to accidentally find films than to miss out TV shows!)
+						$video['episeason'] = '';
 					}
 				}
 
@@ -198,6 +211,12 @@ function buildVideoArray($dir) {
 
 					// make it case insensitive
 					$video['name'] = ucwords(strtolower($video['name']));
+
+					// rename "The Nobheads" to "Nobheads, The" actually no, don't do that. looks shit, set it as a sort value
+					$video['nameSort'] = $video['name'];
+					if (substr($video['nameSort'], 0, 4) == "The ") {
+						$video['nameSort'] = substr($video['nameSort'], 4);
+					}
 
 					// If we're golden, push to videos array
 					array_push($videos, $video);
@@ -237,9 +256,12 @@ function organiseVideos($videos) {
 function organiseAndSaveVideos() {
 	global $videos;
 
+	#print_r($videos);
 	foreach ($videos as $video) {
-		insertVideoIntoDatabase($video['name'], $video['season'], $video['episode'], $video['path']);
+		insertVideoIntoDatabase($video['name'], $video['nameSort'], $video['season'], $video['episode'], $video['path']);
 	}
+	/*
+	*/
 
 	/*
 	$organised = organiseVideos($videos);
@@ -263,7 +285,7 @@ function organiseAndSaveVideos() {
 	*/
 }
 
-function insertVideoIntoDatabase($name, $season, $episode, $path) {
+function insertVideoIntoDatabase($name, $nameSort, $season, $episode, $path) {
 	global $conn;
 
 	// check if it already exists
@@ -288,11 +310,12 @@ function insertVideoIntoDatabase($name, $season, $episode, $path) {
 		//$sql = "INSERT INTO videos (id,name,season,episode,path,watched)
 		//	VALUES (NULL,:name,:season,:episode,:path,NULL)
 		//	if NOT EXISTS (select `name` from videos where `name` = :nameduplicate) LIMIT 1";
-		$sql = "INSERT INTO videos (id,name,season,episode,path,watched)
-			VALUES (NULL,:name,:season,:episode,:path,0)";
+		$sql = "INSERT INTO videos (id,name,nameSort,season,episode,path,watched)
+			VALUES (NULL,:name,:nameSort,:season,:episode,:path,0)";
 		#echo $sql;
 		$q = $conn->prepare($sql);
 		$q->bindParam(':name', $name, PDO::PARAM_STR);
+		$q->bindParam(':nameSort', $nameSort, PDO::PARAM_STR);
 		$q->bindParam(':season', $season, PDO::PARAM_STR);
 		$q->bindParam(':episode', $episode, PDO::PARAM_STR);
 		$q->bindParam(':path', $path, PDO::PARAM_STR);

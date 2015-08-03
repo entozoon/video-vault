@@ -16,7 +16,7 @@ if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1' && substr($_SERVER['REMOTE_ADDR'],0,9
 $servername = "localhost";
 $database = "video-helper";
 $username = "root";
-$password = "";
+$password = "mysql";
 
 /*
 switch($_SERVER["HTTP_HOST"]) {

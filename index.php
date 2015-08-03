@@ -76,16 +76,19 @@ if (!empty($_POST)) {
 
 */
 
+if (empty(getSetting('videofolder'))) {
+	echo '<p>Please enter a video folder below:</p>';
+} else {
 
-$videos = getVideos();
-$videos = organiseVideos($videos);
-$videos = sortVideos($videos);
-#echo '<pre>';print_r($videos);
-echoVideos($videos);
+	$videos = getVideos();
+	$videos = organiseVideos($videos);
+	$videos = sortVideos($videos);
+	#echo '<pre>';print_r($videos);
+	echoVideos($videos);
 
 
-#echo "\n\n\n\n\n";print_r($videos);
-
+	#echo "\n\n\n\n\n";print_r($videos);
+}
 ?>
 			<hr />
 			<h1>Admin</h1>
@@ -117,7 +120,7 @@ echoVideos($videos);
 	</div>
 </div>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
 $(function() {
 

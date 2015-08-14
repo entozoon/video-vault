@@ -21,6 +21,35 @@ function getVideos() {
 	return $result;
 }
 
+function getRecent() {
+	global $conn;
+
+	// Get all videos, ordered by most recent watched episodes
+	$sql = "SELECT * FROM videos ORDER BY watchedDate DESC";
+	$q = $conn->prepare($sql);
+	$q->execute();
+	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+	$result = $q->fetchAll();
+
+	// Gather up the episodes into a set of 30 (or whatever) shows, to be spliced more later
+	// (in case some of them don't have any more episodes to watch)
+	//$slice = array_splice($result, 0, 30);
+	$slice = array();
+	$sliceLimit = 30;
+	foreach ($result as $video) {
+		// check show isn't already included
+		$inSlice = false;
+		foreach ($slice as $v) {
+			if (!empty($v['name']) && $v['name']==$video['name']) {
+				$inSlice = true;
+			}
+		}
+		if (!$inSlice && count($slice) < $sliceLimit) array_push($slice, $video);
+	}
+
+	return $slice;
+}
+
 
 // only run this on page load, rather than saveVideos
 function sortVideos($organised) {
@@ -59,11 +88,125 @@ function echoVideos($videos) {
 	echo '</ul>';
 }
 
+function echoRecentVideos($videos) {
+	global $conn;
+
+	$continueWatchingCount = 0;
+	$continueWatchingLimit = 8;
+
+	if (!empty($videos)) {
+		foreach ($videos as $video) {
+			#echo $video['name'] . ' ';
+			#echo $video['season'] . ' ';
+			#echo $video['episode'] . ' ';
+
+			$seasonNum = $video['season'];
+			$episodeNum = $video['episode'] + 1;
+
+			$nextEpisode = '';
+
+			// See if the next episode in that season exists
+			$sql = "SELECT * FROM videos
+			WHERE `name` = :name
+			AND `season` = :season
+			AND `episode` = :episode";
+			$q = $conn->prepare($sql);
+			$q->bindParam(':name', $video['name'], PDO::PARAM_STR);
+			$q->bindParam(':season', $seasonNum, PDO::PARAM_STR);
+			$q->bindParam(':episode', $episodeNum, PDO::PARAM_STR);
+			$q->execute();
+			if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+			$result = $q->fetchAll();
+
+			if (empty($result)) {
+				// See if the next episode in that season exists
+				$seasonNum++;
+				$episodeNum = 1;
+
+				// SAME AS ABOVE
+				$sql = "SELECT id, path FROM videos
+				WHERE `name` = :name
+				AND `season` = :season
+				AND `episode` = :episode";
+				$q = $conn->prepare($sql);
+				$q->bindParam(':name', $video['name'], PDO::PARAM_STR);
+				$q->bindParam(':season', $seasonNum, PDO::PARAM_STR);
+				$q->bindParam(':episode', $episodeNum, PDO::PARAM_STR);
+				$q->execute();
+				if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+				$result = $q->fetchAll();
+			}
+
+
+			if (!empty($result)) {
+				#print_r($result);
+				##echo '- 	new season ';
+				$nextEpisode['id'] = $result[0]['id'];
+				$nextEpisode['path'] = $result[0]['path'];
+				$nextEpisode['name'] = $video['name'];
+				$nextEpisode['season'] = $seasonNum;
+				$nextEpisode['episode'] = $episodeNum;
+			}
+
+			if (!empty($nextEpisode)) {
+				if ($continueWatchingCount < $continueWatchingLimit) {
+					echo '<div class="videos__recent__wrapper"><a class="videos__recent" data-name="'.$nextEpisode['name'].'" data-id="'.$nextEpisode['id'].'" data-path="'.$nextEpisode['path'].'">';
+
+					/*
+					$posterUrl = getPoster($nextEpisode['name']);
+					if (!empty($posterUrl)) {
+						echo '<img src="'.$posterUrl.'" />';
+					}
+					*/
+					echo "<h3>".$nextEpisode['name']."<i class='fa fa-play'></i></h3>";
+					echo '<p>Season '.$nextEpisode['season'].' Episode '.$nextEpisode['episode'].'</p>';
+					echo '</a></div>';
+					$continueWatchingCount++;
+				}
+			}
+		}
+	}
+
+	#echo '<pre style="font-size:10px">'; print_r($videos);
+}
+
+function getPoster($name) {
+	#echo "\n".$name." ";
+	$url = "http://www.myapifilms.com/imdb?title=".urlencode($name)."&format=JSON&limit=1";
+	$result = file_get_contents($url);
+	if (!empty($result) && !empty($result[0])) {
+		$result = json_decode($result, TRUE);
+		#print_r($result);
+		if (!empty($result) && !empty($result[0])) {
+			$result = $result[0];
+			if (!empty($result['urlPoster'])) {
+
+				#header('Content-type: image/jpeg');
+
+				$im = file_get_contents($result['urlPoster']);
+				/*
+				ob_start();
+				imagejpeg($im);
+				$outputBuffer = ob_get_clean();
+				//$base64 = base64_encode($outputBuffer);
+				echo '<img src="data:image/jpeg;base64,'.$im.'" />';
+				*/
+				echo base64_encode($im);
+			}
+		}
+	}
+}
+
+
+
 function setWatched($id) {
 	global $conn;
 
-	$sql = "UPDATE videos SET watched=1 WHERE id=$id";
+	#$sql = "UPDATE videos (watched,watchedDate) VALUES (1, NOW()) WHERE id=:id";
+	$sql = "UPDATE videos SET watched=1, watchedDate=NOW() WHERE id=:id";
+	#echo $sql;
 	$q = $conn->prepare($sql);
+	$q->bindParam(':id', $id, PDO::PARAM_STR);
 	$q->execute();
 	if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
 	return true;
@@ -203,6 +346,7 @@ function buildVideoArray($dir) {
 
 
 				if (!empty($video['name'])) {
+					#echo 'doing a thing';
 					// strip silly chars from name
 					$video['name'] = str_replace(array("'","(",")","[","]"),'',$video['name']);
 
@@ -216,6 +360,7 @@ function buildVideoArray($dir) {
 					$video['nameSort'] = $video['name'];
 					if (substr($video['nameSort'], 0, 4) == "The ") {
 						$video['nameSort'] = substr($video['nameSort'], 4);
+						#echo $video['nameSort'];
 					}
 
 					// If we're golden, push to videos array
@@ -321,6 +466,16 @@ function insertVideoIntoDatabase($name, $nameSort, $season, $episode, $path) {
 		$q->bindParam(':path', $path, PDO::PARAM_STR);
 		$q->execute();
 		if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+	} else {
+		/*
+		// ONE OFF UPDATE OF NAMESORT (because of reasons)
+		$sql = "UPDATE videos SET nameSort=:nameSort WHERE name=:name";
+		$q = $conn->prepare($sql);
+		$q->bindParam(':name', $name, PDO::PARAM_STR);
+		$q->bindParam(':nameSort', $nameSort, PDO::PARAM_STR);
+		$q->execute();
+		if (!$q) { die("Execute query error, because: ". $conn->errorInfo()); }
+		*/
 	}
 }
 

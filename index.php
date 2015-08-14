@@ -80,6 +80,17 @@ if (empty(getSetting('videofolder'))) {
 	echo '<p>Please enter a video folder below:</p>';
 } else {
 
+?>
+	<h2>Continue Watching</h2>
+	<div class="recent">
+<?php
+	$recent = getRecent();
+	echoRecentVideos($recent);
+?>
+	</div>
+	<h2>All Videos</h2>
+<?php
+
 	$videos = getVideos();
 	$videos = organiseVideos($videos);
 	$videos = sortVideos($videos);
@@ -160,7 +171,7 @@ $('.videos .toggle').click(function() {
 });
 
 
-$('.videos__episode').click(function() {
+$('.videos__episode, .videos__recent').click(function() { // recent too, yolo
 	//$('.status').html('Playing video..');
 	$('.videos__episode').removeClass('videos__episode--playing')
 	$(this).addClass('videos__episode--watched videos__episode--playing');
@@ -177,6 +188,10 @@ $('.videos__episode').click(function() {
 	})
 	.done(function(data) {
 	})
+	// reload the page if playing a continue watching video, loads the new one nice
+	if ($(this).hasClass('videos__recent')) {
+		location.reload();
+	}
 });
 
 
@@ -213,13 +228,65 @@ $('.checkDeletedVideos').click(function() {
 */
 resetWatchedClasses();
 
+
+// For the recent videos, ajax in a poster image
+$('.videos__recent').each(function() {
+
+	$.ajax({
+		context: this,
+		type: "post",
+		url: "getPoster.php",
+		data: { name: $(this).attr('data-name') },
+		success:  function(data) {
+			//console.log(data);
+			$(this).prepend('<img src="data:image/jpeg;base64,'+data+'" />');
+		},
+		error: function() {
+			$('.status').html('getPoster error!');
+		}
+		//complete: this.exeComplete
+	});
+
 });
 
+
+
+});
+
+/*
+function gatherMostWatched() { // run before resetWatchedClasses or anything
+
+	// make a list of the shows in order of how many occurrences of --watched they have
+	// i.e. how many... wait no don't do any of this.
+	// it needs to be most recently watched. To the PHPmobile!
+	$('.videos__show').each(function() {
+
+	});
+}
+*/
 function resetWatchedClasses() {
+
+	// If you've watched an episode, set EVERYTHING before it as being watched.. !visibly) #yolo
+	$('.videos__show').each(function() {
+		if ($(this).find('.videos__episode--watched').length) {
+
+			var unwatched = true;
+			// iterate over the episodes in reverse order (BELIEVE IT BITCH)
+			$($(this).find('.videos__episode').get().reverse()).each(function() {
+				if ($(this).hasClass('videos__episode--watched')) unwatched = false;
+
+				// set everything before the latest watched episode as also being watched
+				if (!unwatched) $(this).addClass('videos__episode--watched');
+			});
+
+		}
+	});
+
+
 	// If a whole season/show has been viewed, set watched classes
 	// This could be php'd, but let's take a load off it's shoulders.
 	// Probably a more concise way of writing this but.. brainfart
-	$('.videos__season').removeClass('videos__seasion--watched').each(function() {
+	$('.videos__season').removeClass('videos__season--watched').each(function() {
 		var watched = true;
 		$(this).find('.videos__episode').each(function() {
 			if (!$(this).hasClass('videos__episode--watched')) watched = false;

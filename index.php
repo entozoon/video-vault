@@ -190,7 +190,7 @@ $('.videos__episode, .videos__recent').click(function() { // recent too, yolo
 	})
 	// reload the page if playing a continue watching video, loads the new one nice
 	if ($(this).hasClass('videos__recent')) {
-		location.reload();
+		setTimeout(function() { location.reload(); }, 500);
 	}
 });
 
@@ -206,7 +206,7 @@ $('.clearVideos').click(function() {
 		c(data);
 	})
 	.done(function(data) {
-		location.reload();
+		setTimeout(function() { location.reload(); }, 500);
 	})
 });
 
@@ -222,7 +222,7 @@ $('.checkDeletedVideos').click(function() {
 		c(data);
 	})
 	.done(function(data) {
-		location.reload();
+		setTimeout(function() { location.reload(); }, 500);
 	})
 });
 */

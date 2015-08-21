@@ -158,8 +158,8 @@ function echoRecentVideos($videos) {
 						echo '<img src="'.$posterUrl.'" />';
 					}
 					*/
-					echo "<h3>".$nextEpisode['name']."<i class='fa fa-play'></i></h3>";
-					echo '<p>Season '.$nextEpisode['season'].' Episode '.$nextEpisode['episode'].'</p>';
+					//echo "<h3>".$nextEpisode['name']."<i class='fa fa-play'></i></h3>";
+					echo '<p>Season '.$nextEpisode['season'].'<br />Episode '.$nextEpisode['episode'].'</p>';
 					echo '</a></div>';
 					$continueWatchingCount++;
 				}
